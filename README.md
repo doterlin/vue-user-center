@@ -1,6 +1,8 @@
 # vue-user-center
 > 一个用vue.js(2.0)写的直播类应用web端个人中心
 
+![截图](https://github.com/doterlin/vue-user-center/blob/master/images/print-screen.png)
+
 ## 编译
 ```
 npm run build
