@@ -1,6 +1,10 @@
 # vue-user-center
 > 一个用vue.js(2.0)写的直播类应用web端个人中心
+
+> github地址：[https://github.com/doterlin/vue-user-center](https://github.com/doterlin/vue-user-center)
+
 > 演示地址：[https://doterlin.github.io/vue-user-center/](https://doterlin.github.io/vue-user-center)
+
 ![截图](https://github.com/doterlin/vue-user-center/blob/master/images/print-screen.png)
 
 ## 编译
