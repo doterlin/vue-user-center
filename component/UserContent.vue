@@ -13,6 +13,6 @@ export default {
 </script>
 
 <style scoped>
-.content{background: #fff;vertical-align: top; display: inline-block; width: 850px; height: 935px; margin-left: 20px; overflow-y: auto;}
+.content{background: #fff;vertical-align: top; display: inline-block; width: 850px; height: 935px; margin-left: 20px; overflow-y: auto;overflow: hidden;}
 .content-main{margin: 20px; text-align: left;}
 </style>

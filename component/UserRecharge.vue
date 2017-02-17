@@ -1,6 +1,7 @@
 //用户充值
 
 <template>
+<transition name="slide">
 <div class="content-main">
   <div class="remain">
     <p class="remain-p">Number of remaining diamonds: </p> <span class="remain-span" v-text="gold || 0"></span>
@@ -20,6 +21,7 @@
      <a href="javascript:;" :class="'btn-lg' + (isLoading?' btn-loading':'')" @click="recharge">Recharge</a>
   </div>
 </div>
+</transition>
 </template>
 
 <script>
@@ -109,7 +111,7 @@ export default {
       //请求地址:this.rechargeFetchUrl
       setTimeout(()=>{
         ts.isLoading = false;
-      },2000)
+      },1000)
     }
   }
 }
@@ -128,10 +130,10 @@ export default {
 .Call12{background-position: -203px 0;}
 .HAPPY{background-position: -406px 0;}
 .Vinaphone{background-position: -609px 0;}
-.MobiFone{background-position: 0 -74px;}
-.FPTGate{background-position: -203px -74px;}
-.Viettel{background-position: -406px -74px;}
-.Megacard{background-position: -609px -74px;}
+.MobiFone{background-position: 0 -75px;}
+.FPTGate{background-position: -203px -75px;}
+.Viettel{background-position: -406px -75px;}
+.Megacard{background-position: -609px -75px;}
 .Zing{background-position: 0 -149px;}
 .Oncash{background-position: -203px -149px;}
 .SMS{background-position: -406px -149px;}

@@ -1,12 +1,14 @@
 //用户直播记录组件
 
 <template>
+<transition name="slide">
 <div class="content-main">
   <div class="ml10 bold">Live Record</div>
   <div class="list-wrap">
     <PagingList :onePageNum="onePageNum" :isShowPaging="true" :listType='listType' :listHeight="listHeight" :data="liveRecordList" :listHeader="listHeader" :rowsWidth="rowsWidth" :listType="listType"></PagingList>
   </div>
 </div>
+</transition>
 </template>
 
 <script>
@@ -209,7 +211,7 @@ export default {
       "data": "2016-08-06",
       "time": "04:40:01"
       }]
-    },2000)
+    },1500)
 
   }
 }

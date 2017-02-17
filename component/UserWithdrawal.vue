@@ -1,6 +1,7 @@
 //用户提现组件
 
 <template>
+<transition name="slide">
 <div class="content-main cash">
   <Loading v-if="loadingData"></Loading>
   <div class="con" v-if="!loadingData">
@@ -56,6 +57,7 @@
   </div>
   </div>
 </div>
+</transition>
 </template>
 
 <script>
@@ -143,7 +145,7 @@ export default {
       }
 
       if(+ts.withdrawalNumber>+diamonds){ //提现金额大于当前钻石数
-        alert(that.getWord('Cash is greater than the current number of stars!'));
+        alert(ts.getWord('Cash is greater than the current number of stars!'));
         return false;
       }
 
@@ -222,7 +224,7 @@ export default {
           ctime: '2017-01-11',
           status: 1
         }];
-      },2000)
+      },1000)
     }
   }
 }

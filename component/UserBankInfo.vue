@@ -23,11 +23,6 @@
                     <label data-wordkey="withdrawals-addr">Home address</label>
                     <input type="text" class="line" v-model="info.address" maxlength="70" required="">
                 </div>
-                <div class="form-one">
-                    <span class="c-red">*</span>
-                    <label data-wordkey="withdrawals-idcard">Identification number</label>
-                    <input type="text" class="line" v-model="info.user_id" maxlength="40" required="">
-                </div>
             </div>
         </div>
 
@@ -45,16 +40,6 @@
                     <label data-wordkey="withdrawals-bank-holder">Account holder</label>
                     <input type="text" class="line" v-model="info.account_owner" maxlength="50" required="">
                 </div>  
-                <div class="form-one">
-                    <span class="c-red">*</span>
-                    <label data-wordkey="withdrawals-bank-acc">Bank account number</label>
-                    <input type="text" class="line" v-model="info.bank_account" maxlength="50" required="">
-                </div>
-                <div class="form-one">
-                    <span class="c-red">*</span>
-                    <label data-wordkey="withdrawals-bank-addr">Bank address</label>
-                    <input type="text" class="line" v-model="info.bank_address" maxlength="70" required="">
-                </div>
                 <div class="form-one inline">
                     <span class="c-red">*</span>
                     <label>Swift code</label>
@@ -114,25 +99,13 @@ export default {
       	bank_branch:'',
       	agency:'',
       	contract: 0,
-      	sid:'',
-      	uid:''
       }
 
   	}
   },
-  components:{
-  },
-  created(){
-    this.info.sid = this.getCookie('session');
-    this.info.uid = this.getCookie('uid');
-  },
-  mounted(){
-
-  },
   watch:{
     //监听单选框
   	"info.contract": (val, oldval) => {
-  		//console.log(val, oldval);
   		let radio1 = document.getElementById('radio1');
   		let radio2 = document.getElementById('radio2');
 
@@ -140,8 +113,9 @@ export default {
   	} 
   },
   methods:{
+    //逻辑判断
     saveUserBankInfo(){
-    	
+    	//某一项为空时不发请求
     	if(this.info.name=='' || this.info.phone=="" || this.info.user_id=="" ||this.info.address=="" ||this.info.bank_name=="" || this.info.account_owner=="" || this.info.bank_account=="" || this.info.bank_address=="" || this.info.swift_code=="" || this.info.agency==""){
     		alert('Please fill in the required!')
     		return false;
@@ -149,9 +123,11 @@ export default {
     		this.sendUserBankInfo();
     	}
     },
+
+    //发送保存请求
     sendUserBankInfo(){
       var ts = this;
-      ts.$router.push('/withdrawal')
+      ts.$router.push('/withdrawal') //返回到原来的路由
     }
 
   }
@@ -159,7 +135,7 @@ export default {
 </script>
 
 <style scoped>
-.bank-info{width: 600px; margin:35px auto;}
+.bank-info{width: 600px; margin:35px auto; overflow-y: auto}
 .c-red{color: #FF6B8B;position: relative; top: 2px; margin-right: 2px;}
 .line{width: 578px; padding: 0 10px; margin-top: 10px;background: #fff;color: #333; height: 39px; line-height: 39px; border-radius: 5px; border: 1px solid #E3E3E3; overflow:hidden; margin-top: }
 .line.warn{border: 1px solid #f88787;}
