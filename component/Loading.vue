@@ -1,3 +1,5 @@
+//加载中的效果组件
+
 <template>
 <div class="loadEffect">
     <span class="ld-span"></span>

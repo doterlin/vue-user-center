@@ -1,7 +1,9 @@
+//整个应用的根组件
+
 <template>
 <div class="container" id="app">
   <div class="left">
-    <UserInfo :nick="userInfo.nick||''" :portrait="userInfo.portrait || ''" :level="userInfo.ulevel || 1" :uid="userInfo.uid||''" :starNumber="userInfo.point||0" :diamondNumber="userInfo.gold||0"></UserInfo>
+    <UserInfo :nick="userInfo.nick||''" :portrait="userInfo.portrait || ''" :level="userInfo.ulevel || 1" :uid="userInfo.uid || ''" :starNumber="userInfo.point||0" :diamondNumber="userInfo.gold||0"></UserInfo>
     <UserMenu :uid="userInfo.uid"></UserMenu>
   </div><UserContent></UserContent>
 </div>
@@ -17,13 +19,13 @@ export default {
   data(){
     return {
       isLogin: false,
-      userInfo:{
-        nick: 'Doterlin',
-        ulevel: 20,
-        uid: '10000',
-        gold: '2186',
-        point: '8864',
-        portrait: 'images/profile.png'
+      userInfo: { //保存用户信息
+        nick: null,
+        ulevel: null,
+        uid: null,
+        gold: null,
+        point: null,
+        portrait: null
       }
     }
   },
@@ -33,21 +35,38 @@ export default {
     UserContent
   },
   mounted(){
-    this.$router.push('/live-record/' + uid);
+    //组件开始挂载时获取用户信息
+    this.getUserInfo();
   },
-  methods: {
-    //请求用户的一些信息，这些写死
-    getUserInfo(sid,uid){
-      let ts = this;
 
-      //发送http请求获取，这些写死
-      ts.userInfo = {
+  methods: {
+    //请求用户的一些信息
+    getUserInfo(){
+
+      //发送http请求获取，这里写死作演示
+      this.userInfo = {
         nick: 'Doterlin',
         ulevel: 20,
         uid: '10000',
         gold: '2186',
-        point: '8864'
+        point: '8864',
+        portrait: 'images/profile.png'
       }
+
+      //实例开发中这里会向服务端请求数据
+      //如下(用了vue-resource):
+      /*ts.$http.get(url, {
+        //参数
+        "params":{}
+      }).then((response) => {
+        //Success
+      }, (response) => {
+        //Error
+      });*/
+
+      //提交mutation到Store
+      this.$store.commit('updateUserInfo', this.userInfo); 
+      console.log(this.$store.state.userInfo)
     }
   }
 }

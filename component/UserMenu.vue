@@ -1,9 +1,9 @@
 <template>
 <div class="menu">
 	<ul class="menu-ul">
-		<!-- <router-link class="menu-link" to="/withdrawal/" tag="li">Personnal Center</router-link> -->
-		<router-link class="menu-link" :to="{ path: '/live-record/' + uid}" tag="li">Live Record</router-link>
-		<router-link class="menu-link" to="/recharge/" tag="li">Recharge</router-link>
+		<router-link class="menu-link" to="/withdrawal" tag="li">Personnal Center</router-link>
+		<router-link class="menu-link" :to="{ path: '/live-record'}" tag="li">Live Record</router-link>
+		<router-link class="menu-link" to="/recharge" tag="li">Recharge</router-link>
 		<!-- <router-link class="menu-link" to="/4" tag="li">Anchor Certification</router-link> -->
 	</ul>
 </div>
@@ -11,12 +11,7 @@
 
 <script>
 export default {
-  name: 'UserMenu',
-  data(){
-  	return {
-  	}
-  },
-  props:['uid']
+  name: 'UserMenu'
 }
 </script>
 

@@ -24,17 +24,14 @@
 
 <script>
 import PagingList from './PagingList.vue'
-import Global from '../js/global.js'
 
 export default {
   name: 'UserRecharge',
   data(){
   	return{
-  		rechargeFetchUrl: this.adminDomain + '/payment/deposit.php',
+  		rechargeFetchUrl: this.$store.domain + '/live.php',
 
       isLoading: false, //是否在请求中
-
-      gold: null, //钻石数
 
       userCardNo:null, //用户卡号
 
@@ -42,7 +39,7 @@ export default {
 
       focusIndex: 0, //选中了第几个充值平台
       
-      platformList: [{ 
+      platformList: [{ //平台列表
         name: 'VNP',
         className: 'Vinaphone'
       },{
@@ -66,27 +63,19 @@ export default {
       }]
   	}
   },
-  mounted(){
-    this.getGold();
+  computed: {
+    //从store获取钻石数
+    gold(){
+      return this.$store.state.userInfo.gold
+    }
   },
   methods: {
+    //选择充值平台
     selectPlatform(index){
       this.focusIndex = index;
     },
 
-    getGold(){
-      var ts = this;
-      ts.gold = Global.inout.gold;
-      if(ts.gold!=null){
-        return;
-      }else{
-        setTimeout(()=>{
-          ts.getGold()
-        }, 300)
-      }
-    },
-
-    //充值逻辑
+    //充值逻辑判断
     recharge(){
       //如果在请求中则退出，防止多次点击
       if(this.isLoading){
@@ -115,31 +104,12 @@ export default {
     //充值请求
     toRecharge(){
       let ts = this;
-      ts.$http.post( ts.rechargeFetchUrl, {
-        platform: 'VNPT',
-        app: 'vn.media.itsme',
-        provider: ts.platformList[ts.focusIndex].name,
-        pin: ts.userCardNo,
-        serial: ts.userSerialNo
-      }).then((response) => {
-          //console.log(response.data);
 
-          //成功
-          if(response.data.dm_error == 0){
-            alert('Recharge success!')
-            location.reload()
-          }
-          //该卡验证失败
-          else if(response.data.th_status == 321){
-            alert('Validation failed!')
-          }
-          //该卡已充值
-          else if(response.data.th_status == 401){
-            alert('The card has been Delta!')
-          }
-
-          this.isLoading = false;
-      })
+      //充值请求写在这。并改变loading状态
+      //请求地址:this.rechargeFetchUrl
+      setTimeout(()=>{
+        ts.isLoading = false;
+      },2000)
     }
   }
 }

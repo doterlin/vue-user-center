@@ -100,7 +100,7 @@ export default {
   name: 'UserBankInfo',
   data(){
   	return {
-  	  bankInfoFetchUrl: this.domain + 'mobile/proxy/mgr/WithdrawInfo.php',
+  	  bankInfoFetchUrl: this.$store.state.domain + '/saveBankInfo.php',
       info:{
       	name:'',
       	phone:'',
@@ -130,6 +130,7 @@ export default {
 
   },
   watch:{
+    //监听单选框
   	"info.contract": (val, oldval) => {
   		//console.log(val, oldval);
   		let radio1 = document.getElementById('radio1');
@@ -150,21 +151,7 @@ export default {
     },
     sendUserBankInfo(){
       var ts = this;
-      ts.$http.get(ts.bankInfoFetchUrl, {
-        "params":{
-          "sid": ts.info.sid,
-          "uid": ts.info.uid
-        }
-      }).then((response) => {
-        let res = JSON.parse(response.data);
-        if(res.dm_error==0){
-        	//alert('Save success!');
-        	ts.$router.push('/withdrawal')
-        }
-      }, (response) => {
-        console.log('An error occurred while getting the record!')
-     });
-
+      ts.$router.push('/withdrawal')
     }
 
   }

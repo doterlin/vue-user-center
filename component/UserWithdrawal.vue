@@ -35,10 +35,10 @@
           <div class="tip-tag" v-if="isShowTip">
             <div class="arrow">
                <em></em><span></span>
-            </div>More than 40000 stars can apply for cash withdrawal 
+            </div>More than 0 stars can apply for cash withdrawal 
             can be submitted at any time to withdraw the 
             application, but need to complete a transaction before 
-            they can submit the next pen, each mention is to 10,000 stars
+            they can submit the next pen, each mention is to 1 stars
           </div>
         </transition>
       </div>
@@ -66,29 +66,27 @@ export default {
   name: 'UserWithdrawal',
   data(){
   	return{
-  		cashRecordFetchUrl: this.domain + '/mobile/proxy/mgr/WithdrawHistory.php',
-      getUserWdInfoUrl:this.domain + '/mobile/proxy/mgr/WithdrawInfo.php',
-      preUrl:this.domain + '/mobile/proxy/payment/PreWithdraw.php',
-      withdrawalUrl: this.domain + '/mobile/proxy/payment/WithdrawApply.php',
+  		cashRecordFetchUrl: this.$store.state.domain + '/wdrecord.php',
+      withdrawalUrl: this.$store.state.domain + '/apply.php',
   		cashRecordList: [
       ],
-      UserWdInfo:0,
       withdrawalNumber: "",
       preWithdraw: {
         gold: 0,
         withdraw: 0,
         withdraw_accept: true
       },
+
+      //这一段是数据表格配置
       onePageNum: 9,
       rowsWidth: ['40%', '40%', '20%'],
       listHeader:['Amount', 'Submission', 'Status'],
       listType:'cashRecord',
       listHeight:'425px',
+
       isShowTip: false,
       isAccept: true,
       loadingData: true,
-      uid: '',
-      sid: '',
       isWdLoading: false
   	}
   },
@@ -97,105 +95,64 @@ export default {
     Loading
   },
   created(){
-    this.sid = this.getCookie('session');
-    this.uid = this.getCookie('uid');
   },
   mounted(){
   	this.getCashRecord();
     this.getPre();
-    this.getUserWdInfo();
   },
   methods:{
+    //显示tip
     showTip(){
-      this.isShowTip=true;
+      this.isShowTip = true;
     },
+
+    //隐藏tip
     closeTip(){
-      this.isShowTip=false;
+      this.isShowTip = false;
     },
 
-    //获取金额等
+    //请求可提金额等
     getPre(){
-      var ts = this;
-      ts.$http.get(ts.preUrl, {
-        "params":{
-          "sid": ts.sid,
-          "uid": ts.uid
-        }
-      }).then((response) => {
-        let res = JSON.parse(response.data);
-        //console.log(res.data);
-        ts.preWithdraw = res.data;
-      }, (response) => {
-        console.log('An error occurred while getting the record!')
-     });
+      //模拟请求数据
+      this.preWithdraw = {gold: "39500", withdraw: 200, withdraw_accept: true}
     },
 
-    getUserWdInfo: function(){
-      let ts= this;
-      ts.$http.get(ts.getUserWdInfoUrl,{
-        "params":{
-          "sid": ts.sid,
-          "uid": ts.uid
-        }
-      }).then((response) => {
-        let counter = 0;
-        let res =JSON.parse(response.data);
-        for(let i in res.data){
-          counter++
-        }
-        ts.UserWdInfo = ( counter==0 ? 0:res.data );
-      }, (response) => {
-        console.log('An error occurred while getting the "getUserWdInfo"!')
-      });
-    },
-
-    //提现处理
+    //提现逻辑处理
     applyWithdrawals: function(){
       let ts = this;
       let diamonds = ts.preWithdraw.gold;
-      //console.log(that.isAccept)
+      
+      //未填写数目
       if(ts.withdrawalNumber == ""){
         alert("Please fill in the numbers.");
         return false;
       }
-      if(ts.isWdLoading){
+
+      if(ts.isWdLoading){ //如果在加载中
         return false;
       }
-      if(ts.UserWdInfo == 0){ //当前钻石数小于40000
-        this.$router.push('/bank-info/');
-        return false;
-      }
+
       if(!/^\d+$/.test(ts.withdrawalNumber)){ //是否都为数字
         alert('Please fill in the correct number!');
         return false;
       }
-      if(+diamonds<40000){ //当前钻石数小于40000
+
+      if(+diamonds <= 0){ //当前钻石数小于0
         alert("The current diamond number is less than 40000!");
         return false;
       }
-      if(+ts.withdrawalNumber<40000){ //提现金额小于40000
-        alert('Cash withdrawal amount is less than 40000!');
-        return false;
-      }
-      if(+ts.withdrawalNumber%10!=0){ //提现金额不是10000的整数倍
-        alert('Cash withdrawal is not an integer multiple of 10000!'); 
-        return false;
-      }
+
       if(+ts.withdrawalNumber>+diamonds){ //提现金额大于当前钻石数
         alert(that.getWord('Cash is greater than the current number of stars!'));
         return false;
       }
-      if(!ts.preWithdraw.withdraw_accept){ //服务器是否接收提现
-        alert("You have an application that is still under review!");
-        return false;
-      }
 
-      if(+ts.withdrawalNumber < 40000){ //当前钻石数小于40000
-        alert("The current star number is less than 40000");
-        return false;
-      }
+      this.$router.push('/bank-info/'); //填写一些信息
+      return false;
       
-      ts.gotoWithdrawal()
+      //从上面的return来看在示例中实际上是到达不到这一步的
+      //实际开发会做一些是否需要填写信息的判断，最后可能会到达这一步
+      ts.gotoWithdrawal() 
 
     },
 
@@ -203,52 +160,69 @@ export default {
     gotoWithdrawal(){
       let ts = this;
       ts.isWdLoading = true;
-      ts.$http.jsonp(ts.withdrawalUrl, {
-        "params":{
-          "gold": ts.withdrawalNumber,
-          "uid": ts.uid,
-          "sandbox": 1
-        },
-        "jsonp": "callback"
-      }).then((response) => {
-        that.isWdLoading = false;
-        //console.log(response.data)
-        if(res.dm_error === 0){ //成功
-            alert("Cash withdrawal application submitted");
-          }else if(res.dm_error === 1){
-            alert('Cash withdrawal amount is less than 40000');
-          }else if(res.dm_error === 2){
-            alert('Cash withdrawal is not an integer multiple of 10000');
-          }else{
-            alert(res.error_msg);
-          }
-      }, (response) => {
-        that.isWdLoading = false;
-        console.log('An error occurred while getting the record!')
-      });
+      setTimeout(()=>{
+        ts.isWdLoading = false;
+      },2000)
 
     },
 
     //获取提现记录
     getCashRecord(){
       var ts = this;
-      /*setTimeout(function(){
-        ts.loadingData=false;
-      },1000)
-      return;*/
-      ts.$http.get(ts.cashRecordFetchUrl, {
-        "params":{
-          "uid": ts.uid,
-          "sid": ts.sid
-        }
-      }).then((response) => {
-        let res = JSON.parse(response.data);
-        ts.loadingData=false;
-        ts.cashRecordList = res.data;
-      }, (response) => {
-        ts.loadingData=false;
-        console.log('An error occurred while getting the record!')
-      });
+
+      //模拟请求数据
+      setTimeout(function(){
+        ts.loadingData = false;
+        ts.cashRecordList = [{
+          gold: 10,
+          ctime: '2017-01-12',
+          status: 1
+        },{
+          gold: 20,
+          ctime: '2017-01-11',
+          status: 2
+        },{
+          gold: 20,
+          ctime: '2017-01-11',
+          status: 3
+        },{
+          gold: 20,
+          ctime: '2017-01-11',
+          status: 2
+        },{
+          gold: 20,
+          ctime: '2017-01-11',
+          status: 2
+        },{
+          gold: 20,
+          ctime: '2017-01-11',
+          status: 2
+        },{
+          gold: 20,
+          ctime: '2017-01-11',
+          status: 1
+        },{
+          gold: 20,
+          ctime: '2017-01-11',
+          status: 2
+        },{
+          gold: 20,
+          ctime: '2017-01-11',
+          status: 3
+        },{
+          gold: 20,
+          ctime: '2017-01-11',
+          status: 2
+        },{
+          gold: 20,
+          ctime: '2017-01-11',
+          status: 2
+        },{
+          gold: 20,
+          ctime: '2017-01-11',
+          status: 1
+        }];
+      },2000)
     }
   }
 }

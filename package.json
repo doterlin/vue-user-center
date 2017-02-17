@@ -30,7 +30,6 @@
     "vue-style-loader": "^1.0.0",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2",
-    "webpack-merge": "^0.15.0",
-    "zepto": "^1.2.0"
+    "webpack-merge": "^0.15.0"
   }
 }
