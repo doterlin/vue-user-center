@@ -7,6 +7,11 @@
 
 ![截图](https://github.com/doterlin/vue-user-center/blob/master/images/print-screen.png)
 
+## 下载
+```
+git clone git@github.com:doterlin/vue-user-center.git
+```
+或者下载[zip](https://github.com/doterlin/vue-user-center/archive/master.zip)
 ## 编译
 ```
 npm run build
@@ -34,4 +39,4 @@ npm run build
 + 所有对代码解释已在注释中，方便查看
 + 一些组件有写到一些url，只是为了表明在实际开发时需要请求后台，在此示例中为了演示效果所以并没有用到
 + loading状态是用`setTimeout`方法演示，并非真正请求后台
-+ `下一版本将增加登录演示`
++ 需要查看登录演示请移步[vue-example-login](https://github.com/doterlin/vue-example-login)
